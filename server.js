@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(cors());
 
-var port = process.env.PORT || 8082; // set our port
+var port = process.env.PORT || 80; // set our port
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/apiv1'); // connect to our database
 //configure routes for our api
