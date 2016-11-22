@@ -44,7 +44,7 @@ router.route('/')
 
   router.route('/:id')
     .get(function(req, res){
-      Transfer.getId(req.params.id, function(err, transfers){
+      Transfer.getSource(req.params.id, function(err, transfers){
         if(err)
           res.send(err);
         res.json(transfers);

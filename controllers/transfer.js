@@ -7,6 +7,11 @@ module.exports = {
       callback(err,person);
     });
   },
+  getSource: function(source, callback) {
+    Transfer.find({"_links.source": source},null,{sort: {created: -1}},function(err, transfers){
+      callback(err,transfers);
+    });
+  },
   create: function(status,data, callback) {
   	var transfer = new Transfer();
     transfer._links.source = data._links.source;

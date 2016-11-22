@@ -4,6 +4,36 @@ var request = require('request');
 var Person = require('../controllers/person');
 var person = require('../models/person')
 var Code = require('../models/code')
+var sms = require('../controllers/channel');
+
+
+// router.use(function(req, res, next) {
+//     // check header or url parameters or post parameters for token
+//     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+//     // decode token
+//     if (token) {
+//         // verifies secret and checks exp
+//         jwt.verify(token, app.get('secret'), function(err, decoded) {
+//             if (err) {
+//                 return res.json({
+//                     success: false,
+//                     message: 'Failed to authenticate token.'
+//                 });
+//             } else {
+//                 // if everything is good, save to request for use in other routes
+//                 req.decoded = decoded;
+//                 next();
+//             }
+//         });
+//     } else {
+//         // if there is no token
+//         // return an error
+//         return res.status(403).send({
+//             success: false,
+//             message: 'No token provided.'
+//         });
+//     }
+// });
 
 	//=======================================
 	//	post -> crea un channel
@@ -50,9 +80,7 @@ var Code = require('../models/code')
 								Code.remove({"code": req.body.code});
 					      res.status(202).json({response: true, message: "verify success"});
 					    });
-							//console.log(person.channel[i].username)
 						}
-
 					}
 				})
 			});
@@ -83,7 +111,7 @@ var Code = require('../models/code')
 					res.status(404).json({response: false, error: "error"});
 				}else if(person == null){
 					Person.createWeb(req.params.id);
-					var codigo = Math.floor(Math.random() * (10000 - 1));
+					var codigo = Math.floor( Math.random() * (10000-999 + 1) + 999 );
 					//codigo = ('0000' + code).slice(-4);
 					var code = new Code();
 					code.remove({idUser: req.params.id});
@@ -94,26 +122,31 @@ var Code = require('../models/code')
 							callback(err, doc)
 					});
 					var message = 'tu codigo de verificacion es: ' + codigo;
-					var info = JSON.stringify({
-						"from": "Minka",
-						"to": "57"+req.params.id,
-						"text": message
-					});
-					request.post({
-						type: "POST",
-						url: 'https://api.infobip.com/sms/1/text/single',
-						headers: {
-							//"authorization": "Basic RGFNaW5rZTIxOlhsczhzbXMyMg==",
-							"authorization": "Basic UGxheU1pbmsyMTpYbHM4c21zMzQ=",
-							"content-type": "application/json",
-						},
-						body: info,
-						dataType: 'json'
-					}, function(err, doc){
-						if(err)
+          sms.send(message, req.params.id, function(err, data){
+            if(err)
 							console.log(err)
-						console.log(doc.body);
-					});
+						console.log(doc.data);
+          });
+          // var info = JSON.stringify({
+					// 	"from": "Minka",
+					// 	"to": "57"+req.params.id,
+					// 	"text": message
+					// });
+					// request.post({
+					// 	type: "POST",
+					// 	url: 'https://api.infobip.com/sms/1/text/single',
+					// 	headers: {
+					// 		//"authorization": "Basic RGFNaW5rZTIxOlhsczhzbXMyMg==",
+					// 		"authorization": "Basic UGxheU1pbmsyMTpYbHM4c21zMzQ=",
+					// 		"content-type": "application/json",
+					// 	},
+					// 	body: info,
+					// 	dataType: 'json'
+					// }, function(err, doc){
+					// 	if(err)
+					// 		console.log(err)
+					// 	console.log(doc.body);
+					// });
 					res.status(202).json({response: true, message: "send success"});
 				}else{
 					for(var i = 0; i<person.channel.length; i++){
@@ -155,7 +188,16 @@ var Code = require('../models/code')
 						}
 					}
 				}
-				// res.status(200).json(person);
 			});
 		});
+  //=======================================
+  //	post -> enviar un sms solo
+  //=======================================
+  router.route('/login')
+    .post(function(req, res){
+      sms.send(function(){
+
+      });
+    });
+
 module.exports = router;
