@@ -20,7 +20,7 @@ app.use(cors());
 
 var port = process.env.PORT || 8082; // set our port
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/apiv1'); // connect to our database
+mongoose.connect('mongodb://127.0.0.1:27017/api-v1'); // connect to our database
 //app.set('secret','minka24');
 //configure routes for our api
 var routesPerson = require('./routes/person');
