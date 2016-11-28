@@ -49,9 +49,9 @@ router.route('/')
             res.status(200).json(person);
         });
     })
-//=======================================
-//	post -> crea un usuario
-//=======================================
+    //=======================================
+    //	post -> crea un usuario
+    //=======================================
     .post(function(req, res) {
         // Person.getId(req.body.channel[1].value, function(err, person) {
         //     if(err)
@@ -87,7 +87,7 @@ router.route('/')
         });
     });
 //=======================================
-//	get -> obtiene un usuairo por su id
+//	get -> obtiene un usuario por su id
 //=======================================
 router.route('/:id')
     .get(function(req, res) {
@@ -156,23 +156,23 @@ router.route('/:id/balance')
 router.route('/:id/token')
     .get(function(req, res) {
         Person.getId(req.params.id, function(err, person) {
-            if (err) {
-                res.status(404).json({
-                    response: false,
-                    error: "UserNotFound"
-                });
-            } else {
-                var token = jwt.sign(person, 'minka424', {
-                    expiresIn: "2 days" // expires in 24 hours
-                });
-                // return the information including token as JSON
-                res.json({
-                    success: true,
-                    message: 'Enjoy your token!',
-                    token: token,
-										person: person
-                });
-            }
+          if (err) {
+              res.status(404).json({
+                  response: false,
+                  error: "UserNotFound"
+              });
+          }else{
+            var token = jwt.sign(person, 'minka424', {
+                expiresIn: "2 days" // expires in 24 hours
+            });
+            // return the information including token as JSON
+            res.json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token,
+              person: person
+            });
+          }
         });
     });
 module.exports = router;

@@ -1,5 +1,4 @@
 var mongoose     = require('mongoose');
-var findOrCreate = require('mongoose-findorcreate');
 var Schema       = mongoose.Schema;
 
 var propertiesSchema = new Schema({
@@ -31,7 +30,5 @@ var PersonSchema   = new Schema({
 	},
 	created: { type: Date, default: Date.now }
 });
-
-PersonSchema.plugin(findOrCreate);
 
 module.exports = mongoose.model('Person', PersonSchema);

@@ -6,8 +6,7 @@ module.exports = {
   codeTelegram: function(data, callback) {
     Person.findOne({"phone": data.phone},function(err, person){
       if(person != "null"){
-        var codigo = Math.floor(Math.random() * (10000 - 1));
-        //codigo = ('0000' + code).slice(-4);
+        var codigo = Math.floor(Math.random() * (10000 - 9999) + 10000);
         var code = new Code();
         code.phone = data.phone;
         code.code = codigo;

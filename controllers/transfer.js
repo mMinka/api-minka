@@ -23,6 +23,30 @@ module.exports = {
     	callback(err, doc);
   	});
   },
+  createWeb: function(phone, callback) {
+    var channel = {
+                    "type" : "phone",
+                    "name": "phone",
+                    "value": phone,
+                    "username": phone,
+                    "notificationId": "573185951045",
+                    "status" : "unverified"
+                  };
+    var walletaddress = webwallet.generate.address();
+  	webwallet.register.address(url, walletaddress.statement);
+    var person = new Person();
+    person.properties = "";
+    person.channel = channel;
+    person.coin.address = walletaddress.address;
+  	person.coin.balance = '10';
+  	person.coin.currency = "LUK";
+  	person.coin.keys.scheme = walletaddress.keys.scheme;
+  	person.coin.keys.private = walletaddress.keys.private;
+  	person.coin.keys.public = walletaddress.keys.public;
+    person.save(function(err, doc) {
+      callback(err, doc);
+    });
+  },
   updateBalance: function(send, receiver,amount, callback){
     Person.findOne({"_id":send},function(err, user1){
       user1.coin.balance = +user1.coin.balance - +amount;
